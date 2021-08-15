@@ -33,6 +33,14 @@ jobs:
       - name: Checkout Moka
         uses: actions/checkout@v2
 
+      - name: Edit Cargo.toml (MSRV 1.45.2)
+        # Use the following dependency version(s) for the MSRV:
+        # - bitflags v1.2.1 (2019-10-14), because v1.3.1 (2021-08-12) requires Rust 1.46.
+        #   https://github.com/moka-rs/moka/pull/25
+        run: |
+          echo '[patch.crates-io]\nbitflags = { git = "https://github.com/bitflags/bitflags", tag = "1.2.1" }' >> Cargo.toml
+        if: ${{ matrix.rust == '1.45.2' }}
+
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
